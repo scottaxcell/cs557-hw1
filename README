@@ -1,0 +1,44 @@
+I used the following site for example code for using libpcap. Specifically,
+reading packets from a device or file and parsing out the data within a packet.
+I used the same data structures provided by example packet sniffer too. These
+can be seen in sniffer.h.
+http://www.tcpdump.org/pcap.html
+
+I chose an output format somewhere inbetween tcpdump output and tshark output.
+To get a similar output using tshark, I used the following commandline.
+tshark -r <filename> -t e -o tcp.relative_sequence_numbers:FALSE
+
+To get a similar output using tcpdump, I used the following commandline.
+tcpdump -r dns+icmp.pcapng -tt -n -S -e
+
+My packet sniffer program appears to be working correctly for both
+interfaces and files.
+
+Example usage on a file and output:
+tokyo:~/cs557/hw1$ ./sniffer -r dns_icmp.pcapng -t 4 -o 1369953918
+1369953918.289143 192.168.43.9 -> 8.8.8.8 Type: 8 Code: 0 Len=98
+1369953918.423506 8.8.8.8 -> 192.168.43.9 Type: 0 Code: 0 Len=98
+1369953919.284961 192.168.43.9 -> 8.8.8.8 Type: 8 Code: 0 Len=98
+1369953920.51840 8.8.8.8 -> 192.168.43.9 Type: 0 Code: 0 Len=98
+1369953920.61263 192.168.43.9 -> 192.168.43.1 UDP 60038->53 Len=80
+1369953920.249212 192.168.43.1 -> 192.168.43.9 UDP 53->60038 Len=124
+1369953920.253446 192.168.43.9 -> 8.8.4.4 Type: 8 Code: 0 Len=98
+1369953921.254290 192.168.43.9 -> 8.8.4.4 Type: 8 Code: 0 Len=98
+1369953921.592902 8.8.4.4 -> 192.168.43.9 Type: 0 Code: 0 Len=98
+1369953922.255278 192.168.43.9 -> 8.8.4.4 Type: 8 Code: 0 Len=98
+
+Runtime limit of 4 seconds reached, exiting..
+
+Example usage on interface and output:
+grok:hw1 scott$ ./sniffer -i en0
+1456977799.223547 216.58.217.2 -> 10.0.0.8 TCP 443->56051 [ PSH ACK ] Seq=650402854 Ack=681933301 Win=362 Len=126
+1456977799.223572 10.0.0.8 -> 216.58.217.2 TCP 56051->443 [ ACK ] Seq=681933301 Ack=650402914 Win=4094 Len=66
+1456977799.223642 216.58.217.2 -> 10.0.0.8 TCP 443->56051 [ FIN ACK ] Seq=650402914 Ack=681933301 Win=362 Len=66
+1456977799.223667 10.0.0.8 -> 216.58.217.2 TCP 56051->443 [ ACK ] Seq=681933301 Ack=650402915 Win=4094 Len=66
+1456977799.223830 10.0.0.8 -> 216.58.217.2 TCP 56051->443 [ FIN ACK ] Seq=681933301 Ack=650402915 Win=4096 Len=66
+1456977799.234053 31.13.66.5 -> 10.0.0.8 TCP 443->56032 [ PSH ACK ] Seq=4148114748 Ack=502150681 Win=72 Len=112
+1456977799.234103 10.0.0.8 -> 31.13.66.5 TCP 56032->443 [ ACK ] Seq=502150681 Ack=4148114794 Win=4094 Len=66
+1456977799.243805 216.58.217.2 -> 10.0.0.8 TCP 443->56057 [ FIN ACK ] Seq=2225879310 Ack=2182941546 Win=361 Len=66
+1456977799.243844 10.0.0.8 -> 216.58.217.2 TCP 56057->443 [ FIN ACK ] Seq=2182941546 Ack=2225879311 Win=4096 Len=66
+
+Scott (02/28/2016)
